@@ -1,32 +1,48 @@
 /*Code by Kanit Mann*/
-int button = 2;      // pin to connect the button
-int presses = 0;    // variable to store number of presses
-const byte pin_num = 8; // how many leds
-int state;        // used for HIGH or LOW
-byte pins[] = {9, 10, 11, 12 , 13};
-
-void setup()
-{
- 
-  for(int i = 0; i < pin_num; i++) {
-    pinMode(pins[i], OUTPUT);
+int led[]={5,6,7,8,9};
+void setup() {
+  Serial.begin(9600);
+  for(int i=0;i<5;i++){
+    pinMode(led[i],OUTPUT);
   }
-  pinMode(button, INPUT);
- 
 }
-
-void loop()
-{
- 
-  String bin1 = String(presses, BIN);
-  int bin_len = bin1.length(); 
-  if(presses <= 31) {  
-    for(int i = 0, x = 1; i < bin_len; i++, x+=2) { 
-      if(bin1[i] == '0') state = LOW;
-      if(bin1[i] == '1') state = HIGH;
-      digitalWrite(pins[i] + bin_len - x, state);
-    } 
-  } else {
-      //well, nothing to do in else, leave it be. 
+void loop() {
+  int i,j;
+  Serial.println("Enter a number (0-31) or Enter 1024 to start a sequence");
+  while(Serial.available()==0){}
+    int k=Serial.parseInt();
+  if (k==1024){
+      for(int n=0;n<32;n++){
+        for(int i=0;i<5;i++){
+        digitalWrite(led[i],LOW);
+        }
+        Serial.print(n);
+        Serial.print(" ");
+        for(int i=4;i>-1;i--){
+          byte st=bitRead(n,i);
+          Serial.print(st);
+          if(st==1) digitalWrite(led[i],HIGH);
+        }
+      Serial.println();
+      delay(1000);
+    }
+  }
+  else{
+    a:
+      for(int i=0;i<5;i++){
+        digitalWrite(led[i],LOW);
+      }
+      int n=k;
+      if (n>31 || n<0){
+        Serial.println("Enter a Valid number (0 - 31)");
+        goto a;
+      }
+      for(int i=4;i>-1;i--){
+      byte st=bitRead(n,i);
+      Serial.print(st);
+      if(st==1) digitalWrite(led[i],HIGH);
+    }
+    Serial.println();
+    delay(1000);
   }
 }
