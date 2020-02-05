@@ -13,7 +13,6 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-void loop() {
   Action:
   if(digitalRead(j)==0){
     int c=0;
@@ -44,5 +43,4 @@ void loop() {
   }
    Serial.println(count);
    delay(500);
-}
 }
