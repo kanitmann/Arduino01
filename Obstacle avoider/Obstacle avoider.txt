@@ -1,0 +1,141 @@
+int distance;
+long duration;
+int trigpin = 13;
+int echopin = 12;
+int a1 = 2;
+int a2 = 3;
+int b1 = 5;
+int b2 = 6;
+#include<Servo.h>
+Servo new1;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  pinMode(trigpin,OUTPUT);
+  pinMode(echopin, INPUT);
+  pinMode(a1,OUTPUT);
+  pinMode(a2,OUTPUT);
+  pinMode(b1,OUTPUT);
+  pinMode(b2,OUTPUT);
+  new1.attach(7);
+}
+
+void stop1()
+{
+  digitalWrite(a1,LOW);
+  digitalWrite(a2,LOW);
+  digitalWrite(b1,LOW);
+  digitalWrite(b2,LOW);
+}
+void left()
+{
+  digitalWrite(a1,LOW);
+  digitalWrite(a2,HIGH);
+  digitalWrite(b1,HIGH);
+  digitalWrite(b2,LOW);
+  delay(1000);
+  new1.write(90);
+}
+void right()
+{
+  
+  digitalWrite(a1,HIGH);
+  digitalWrite(a2,LOW);
+  digitalWrite(b1,LOW);
+  digitalWrite(b2,HIGH);
+  delay(1000);
+  new1.write(90);
+  
+}
+void move1()
+{
+  digitalWrite(a1,HIGH);
+  digitalWrite(a2,LOW);
+  digitalWrite(b1,HIGH);
+  digitalWrite(b2,LOW);
+}
+void reverse()
+{
+  digitalWrite(a1,LOW);
+  digitalWrite(a2,HIGH);
+  digitalWrite(b1,LOW);
+  digitalWrite(b2,HIGH);
+  delay(5000);
+  new1.write(90);
+  move1();
+}
+void look_left()
+{
+  new1.write(180);  
+  delay(600);
+  digitalWrite(trigpin,LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigpin,HIGH);
+  delayMicroseconds(10);
+  duration = pulseIn(echopin,HIGH);
+  distance = duration*0.01715;
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  if(distance<15)
+  {
+    look_right();
+  }
+  else if(distance>15)
+  {
+    new1.write(90);
+    delay(500);
+    left();
+  }
+}
+void look_right()
+{
+  new1.write(0); 
+  delay(600);
+  digitalWrite(trigpin,LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigpin,HIGH);
+  delayMicroseconds(10);
+  duration = pulseIn(echopin,HIGH);
+  distance = duration*0.01715;
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  if(distance < 15)
+  {
+    new1.write(90);
+    delay(500);
+    reverse(); 
+  }
+  else
+  {
+    new1.write(90);
+    delay(500);
+    right();  
+  }
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  
+  new1.write(90);
+  digitalWrite(trigpin,LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigpin,HIGH);
+  delayMicroseconds(10);
+  duration = pulseIn(echopin,HIGH);
+  distance = duration*0.01715;
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  if(distance>=15)
+  {
+    move1();  
+  }
+  
+  if(distance<15)
+  {
+    stop1();  
+    delay(500);
+    look_left();
+  }
+  Serial.println(distance);
+}
