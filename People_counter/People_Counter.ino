@@ -1,7 +1,7 @@
 int count = 0;
 int led = 11;
-int i = 2, j = 3;
-
+int i = 13, j = 3;
+int n,m;
 void setup() {
   // put your setup code here, to run once:
   pinMode(i,INPUT);
@@ -11,38 +11,26 @@ void setup() {
   analogWrite(led,0);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-void loop() {
-  Action:
-  if(digitalRead(j)==0){
-    int c=0;
-    while(digitalRead(i)==0){
-      c++;
-      if(c>1000) goto Action;
-    }
-    count++;
+void loop() 
+{
+  if(m == digitalRead(i))
+  {
+    delay(500);
+    if(n == digitalRead(j))
+    {
+      count++;  
+    }  
+  } 
+  if(n == digitalRead(j))
+  {
+    delay(500);
+    if(m == digitalRead(i))
+    {
+      count--;  
+    }  
   }
-  if(digitalRead(i)==0){
-    int c=0;
-    while(digitalRead(j)==0){
-      c++;
-      if(c>1000) goto Action;
-    }
-    Serial.println("DOWN");
-    count--;
-   
-  }
-  if(count>5){
-    Serial.println("Room Full");
-  }
-  else if(count<0){
-    count=0;
-  }
-  else{
-  analogWrite(led,count*51);
-  }
-   Serial.println(count);
-   delay(500);
+  Serial.println(count);
+  analogWrite(led,51*count);
 }
-}
+ 
+ 
